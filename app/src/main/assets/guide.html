@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="fa">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>راهنمای انتخاب مسابقه</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="guide-page">
+  <header class="topbar guide-topbar">
+    <button onclick="history.back()">بازگشت</button>
+    <div class="title">راهنمای انتخاب مسابقه</div>
+    <button onclick="location.href='index.html'">خانه</button>
+  </header>
+  <main class="guide-shell">
+    <section class="guide-hero">
+      <img src="hub-logo.png" alt="نشان قطب کشوری نجوم و فناوری‌های فضایی">
+      <div><h1>کدام گرایش برای من مناسب است؟</h1><p>ابتدا مقطع تحصیلی و سپس حوزه موردعلاقه خود را انتخاب کنید.</p></div>
+    </section>
+    <section class="step" id="levelStep">
+      <div class="step-heading"><span>۱</span><div><h2>مقطع تحصیلی</h2><p>مقطع خود را انتخاب کنید.</p></div></div>
+      <div id="levels" class="choice-grid"></div>
+    </section>
+    <section class="step locked" id="fieldStep">
+      <div class="step-heading"><span>۲</span><div><h2>حوزه موردعلاقه</h2><p>فقط حوزه‌های دارای گرایش مجاز فعال می‌شوند.</p></div></div>
+      <div id="fields" class="field-choice-grid"></div>
+    </section>
+    <section class="step locked" id="resultStep">
+      <div class="step-heading"><span>۳</span><div><h2>گرایش‌های قابل انتخاب</h2><p id="resultSummary"></p></div></div>
+      <div id="resultsList" class="eligible-list"></div>
+      <div class="source-note">مبنای این راهنما، جدول مقاطع و بخش «شرایط شرکت‌کنندگان» در شیوه‌نامه‌های هفتمین جشنواره است. در صورت وجود شرط اختصاصی، متن کامل شیوه‌نامه ملاک نهایی خواهد بود.</div>
+    </section>
+  </main>
+  <script>
+    let data,selectedLevel=null,selectedField=null;
+    const $=id=>document.getElementById(id);
+    fetch('eligibility-index.json').then(r=>r.json()).then(x=>{data=x;renderLevels()}).catch(()=>{$('levels').innerHTML='<div class="empty">خطا در بارگذاری اطلاعات راهنما.</div>'});
+    function renderLevels(){
+      $('levels').innerHTML='';
+      data.levels.forEach(l=>{const b=document.createElement('button');b.className='choice';b.dataset.id=l.id;b.innerHTML=`<b>${l.title}</b><small>${l.subtitle}</small>`;b.onclick=()=>selectLevel(l.id);$('levels').appendChild(b)});
+    }
+    function selectLevel(id){
+      selectedLevel=id;selectedField=null;
+      document.querySelectorAll('#levels .choice').forEach(x=>x.classList.toggle('selected',x.dataset.id===id));
+      $('fieldStep').classList.remove('locked');$('resultStep').classList.add('locked');renderFields();$('fieldStep').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+    function renderFields(){
+      $('fields').innerHTML='';
+      data.fields.forEach(f=>{const count=f.items.filter(i=>i.levels.includes(selectedLevel)).length;const b=document.createElement('button');b.className='field-choice'+(count?'':' disabled');b.dataset.id=f.id;b.disabled=!count;b.innerHTML=`<span>${f.icon}</span><b>${f.title}</b><small>${count?count+' گرایش مجاز':'گزینه‌ای ندارد'}</small>`;b.onclick=()=>selectField(f.id);$('fields').appendChild(b)});
+    }
+    function selectField(id){
+      selectedField=id;document.querySelectorAll('#fields .field-choice').forEach(x=>x.classList.toggle('selected',x.dataset.id===id));
+      const field=data.fields.find(f=>f.id===id),level=data.levels.find(l=>l.id===selectedLevel),items=field.items.filter(i=>i.levels.includes(selectedLevel));
+      $('resultSummary').textContent=`${items.length} گرایش در «${field.title}» برای «${level.title}»`;
+      $('resultsList').innerHTML='';
+      items.forEach((i,n)=>{const d=document.createElement('article');d.className='eligible-item';d.innerHTML=`<div class="eligible-number">${toFa(n+1)}</div><div class="eligible-copy"><h3>${i.title}</h3>${i.note?`<p class="eligibility-note">${i.note}</p>`:''}<small>شروع راهنما از صفحه ${toFa(i.page)} فایل PDF</small></div><button>مشاهده شیوه‌نامه</button>`;d.querySelector('button').onclick=()=>location.href=`viewer.html?doc=${field.id}&page=${i.page}&section=${encodeURIComponent(i.title)}`;$('resultsList').appendChild(d)});
+      $('resultStep').classList.remove('locked');$('resultStep').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+    function toFa(x){return String(x).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d])}
+  </script>
+</body>
+</html>

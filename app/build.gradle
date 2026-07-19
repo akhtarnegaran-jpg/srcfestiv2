@@ -1,0 +1,17 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'ir.medu.festivalguidelines'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'ir.medu.festivalguidelines'
+        minSdk 24
+        targetSdk 35
+        versionCode 3
+        versionName '1.1.0'
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core:1.15.0'
+}

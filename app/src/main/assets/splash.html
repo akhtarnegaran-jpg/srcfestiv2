@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="fa">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>قطب کشوری نجوم و فناوری‌های فضایی</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="splash-page">
+  <main class="splash-card">
+    <div class="splash-stars" aria-hidden="true"></div>
+    <img class="hub-logo" src="hub-logo.png" alt="نشان قطب کشوری نجوم و فناوری‌های فضایی">
+    <h1>شیوه‌نامه‌های هفتمین جشنواره علمی‌پژوهشی</h1>
+    <p class="splash-credit">تهیه‌شده در واحد فناوری‌های دیجیتال<br>قطب کشوری نجوم و فناوری‌های فضایی<br>پژوهش‌سراهای دانش‌آموزی</p>
+    <button class="primary-button" onclick="enterApp()">ورود به برنامه</button>
+  </main>
+  <script>
+    function enterApp(){ sessionStorage.setItem('introSeen','1'); location.replace('index.html'); }
+    if(sessionStorage.getItem('introSeen')==='1') setTimeout(enterApp,900);
+  </script>
+</body>
+</html>

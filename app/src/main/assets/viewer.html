@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="fa">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <title>نمایش شیوه‌نامه</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="pdf.min.js"></script>
+</head>
+<body class="viewer-page">
+  <header class="topbar">
+    <button onclick="history.back()">بازگشت</button><div id="title" class="title"></div><button onclick="location.href='index.html'">خانه</button>
+  </header>
+  <div class="viewer-controls primary-controls">
+    <button id="prev" title="صفحه قبلی">قبلی</button>
+    <label class="page-jump"><input id="pageInput" inputmode="numeric" aria-label="شماره صفحه"><span id="pageTotal"></span></label>
+    <button id="next" title="صفحه بعدی">بعدی</button>
+    <button id="zoomOut" class="tool-square" title="کوچک‌نمایی">−</button>
+    <span id="zoomLabel" class="zoom-label">۱۰۰٪</span>
+    <button id="zoomIn" class="tool-square" title="بزرگ‌نمایی">+</button>
+    <button id="fit" title="تطبیق با عرض صفحه">عرض صفحه</button>
+  </div>
+  <div class="viewer-controls search-controls">
+    <input id="find" placeholder="جست‌وجوی فارسی در این شیوه‌نامه" autocomplete="off">
+    <button id="go">جست‌وجو</button>
+    <button id="findPrev" class="tool-square" title="نتیجه قبلی">‹</button>
+    <span id="findCount" class="find-count"></span>
+    <button id="findNext" class="tool-square" title="نتیجه بعدی">›</button>
+  </div>
+  <div class="viewer-controls file-controls">
+    <button id="save">ذخیره PDF</button><button id="share">اشتراک‌گذاری</button><button id="print">چاپ / خروجی PDF</button>
+  </div>
+  <div id="msg" class="status">در حال بارگذاری…</div>
+  <div id="canvasWrap" class="canvas-wrap"><canvas id="canvas"></canvas></div>
+  <script>
+    const docs={lab:['آزمایشگاه علوم تجربی','lab.pdf'],literature:['ادبیات و علوم انسانی','literature.pdf'],energy:['انرژی‌های نوین','energy.pdf'],robotics:['رباتیک و هوش مصنوعی','robotics.pdf'],biotech:['زیست‌فناوری','biotech.pdf'],stem:['سلول‌های بنیادی','stem.pdf'],nuclear:['علوم و فنون هسته‌ای','nuclear.pdf'],nano:['نانوفناوری','nano.pdf'],aerospace:['هوافضا و دریا','aerospace.pdf'],astronomy:['نجوم و فناوری‌های فضایی','astronomy.pdf'],herbal:['گیاهان دارویی','herbal.pdf'],coding:['کدنویسی','coding.pdf']};
+    const $=id=>document.getElementById(id),u=new URLSearchParams(location.search),id=u.get('doc')||'astronomy',pdfFile=docs[id][1];
+    let page=+(u.get('page')||1),pdf=null,zoom=1,renderToken=0,baseViewport=null,pageCssWidth=0,pageCssHeight=0,searchPages=[],searchPos=-1,indexDoc=null,pinch=null;
+    $('title').textContent=docs[id][0];$('find').value=u.get('q')||'';
+    pdfjsLib.GlobalWorkerOptions.workerSrc='pdf.worker.min.js';
+    Promise.all([
+      pdfjsLib.getDocument({url:'pdfs/'+pdfFile,disableFontFace:true,useSystemFonts:false}).promise,
+      fetch('search-index.json').then(r=>r.json()).catch(()=>[])
+    ]).then(([loaded,index])=>{
+      pdf=loaded;indexDoc=index.find(x=>x.id===id)||null;page=clamp(page,1,pdf.numPages);$('pageTotal').textContent='از '+fa(pdf.numPages);render();
+      if($('find').value.trim()) runSearch();
+      const section=u.get('section');if(section)setMessage('بخش انتخاب‌شده: '+section);
+    }).catch(e=>{console.error(e);setMessage('خطا در بازکردن فایل: '+(e&&e.message?e.message:'نامشخص'))});
+
+    async function render(){
+      if(!pdf)return;const token=++renderToken,set=await pdf.getPage(page);if(token!==renderToken)return;
+      baseViewport=set.getViewport({scale:1});const available=Math.max(280,$('canvasWrap').clientWidth-18),fitScale=available/baseViewport.width,dpr=Math.min(2,window.devicePixelRatio||1),cssScale=fitScale*zoom,viewport=set.getViewport({scale:cssScale*dpr});
+      const c=$('canvas'),ctx=c.getContext('2d',{alpha:false});pageCssWidth=baseViewport.width*cssScale;pageCssHeight=baseViewport.height*cssScale;c.width=Math.floor(viewport.width);c.height=Math.floor(viewport.height);c.style.width=pageCssWidth+'px';c.style.height=pageCssHeight+'px';
+      await set.render({canvasContext:ctx,viewport}).promise;if(token!==renderToken)return;
+      $('pageInput').value=fa(page);$('zoomLabel').textContent=fa(Math.round(zoom*100))+'٪';setMessage('');updateUrl();window.scrollTo(0,0);
+    }
+    function changePage(n){if(!pdf)return;page=clamp(n,1,pdf.numPages);zoom=1;$('canvasWrap').scrollLeft=0;render()}
+    function changeZoom(next){zoom=clamp(next,.6,4);render()}
+    $('prev').onclick=()=>changePage(page-1);$('next').onclick=()=>changePage(page+1);$('zoomOut').onclick=()=>changeZoom(zoom/1.25);$('zoomIn').onclick=()=>changeZoom(zoom*1.25);$('fit').onclick=()=>changeZoom(1);
+    $('pageInput').onkeydown=e=>{if(e.key==='Enter'){const n=Number(en(e.target.value));if(Number.isFinite(n))changePage(n);e.target.blur()}};
+    $('canvas').ondblclick=()=>changeZoom(zoom>1.15?1:2);
+
+    const wrap=$('canvasWrap');
+    wrap.addEventListener('touchstart',e=>{if(e.touches.length===2){pinch={distance:distance(e.touches),startZoom:zoom,startW:pageCssWidth,startH:pageCssHeight};e.preventDefault()}},{passive:false});
+    wrap.addEventListener('touchmove',e=>{if(pinch&&e.touches.length===2){const z=clamp(pinch.startZoom*distance(e.touches)/pinch.distance,.6,4),ratio=z/zoom;$('canvas').style.width=(pageCssWidth*ratio)+'px';$('canvas').style.height=(pageCssHeight*ratio)+'px';pinch.preview=z;$('zoomLabel').textContent=fa(Math.round(z*100))+'٪';e.preventDefault()}},{passive:false});
+    wrap.addEventListener('touchend',()=>{if(pinch){const z=pinch.preview||pinch.startZoom;pinch=null;changeZoom(z)}});
+    function distance(t){return Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY)}
+
+    function norm(s){return String(s||'').normalize('NFKC').replace(/[يى]/g,'ی').replace(/ك/g,'ک').replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g,'').replace(/[\u200c\u200d]/g,' ').replace(/[^\u0600-\u06ff0-9A-Za-z]+/g,' ').replace(/\s+/g,' ').trim()}
+    function compact(s){return norm(s).replace(/\s/g,'')}
+    function runSearch(){
+      const raw=$('find').value.trim(),q=norm(raw),qc=compact(raw);searchPages=[];searchPos=-1;if(!q||!indexDoc){updateSearch();return}
+      indexDoc.pages.forEach(p=>{const t=norm(p.text);if(t.includes(q)||compact(t).includes(qc))searchPages.push(p.page)});
+      if(searchPages.length){const from=searchPages.findIndex(p=>p>=page);searchPos=from>=0?from:0;goSearch()}else{updateSearch();setMessage('نتیجه‌ای برای «'+raw+'» پیدا نشد.')}
+    }
+    function goSearch(){if(searchPos<0||!searchPages.length)return;page=searchPages[searchPos];zoom=1;updateSearch();setMessage('نتیجه در صفحه '+fa(page));render()}
+    function updateSearch(){$('findCount').textContent=searchPages.length?(fa(searchPos+1)+' از '+fa(searchPages.length)):'';$('findPrev').disabled=!searchPages.length;$('findNext').disabled=!searchPages.length}
+    $('go').onclick=runSearch;$('find').onkeydown=e=>{if(e.key==='Enter')runSearch()};$('findNext').onclick=()=>{if(searchPages.length){searchPos=(searchPos+1)%searchPages.length;goSearch()}};$('findPrev').onclick=()=>{if(searchPages.length){searchPos=(searchPos-1+searchPages.length)%searchPages.length;goSearch()}};
+
+    $('save').onclick=()=>fileAction('savePdf');$('share').onclick=()=>fileAction('sharePdf');$('print').onclick=()=>fileAction('printPdf');
+    function fileAction(name){if(window.AndroidFiles&&typeof AndroidFiles[name]==='function'){AndroidFiles[name](pdfFile,docs[id][0])}else if(name==='savePdf'){const a=document.createElement('a');a.href='pdfs/'+pdfFile;a.download=pdfFile;a.click()}else if(name==='printPdf'){window.print()}else{setMessage('این قابلیت در نسخه اندروید در دسترس است.')}}
+    function updateUrl(){const p=new URLSearchParams(location.search);p.set('doc',id);p.set('page',page);history.replaceState(null,'','?'+p.toString())}
+    function setMessage(s){$('msg').textContent=s||''}
+    function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+    function fa(x){return String(x).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d])}
+    function en(x){return String(x).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d))}
+  </script>
+</body>
+</html>

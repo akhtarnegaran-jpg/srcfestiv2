@@ -1,0 +1,17 @@
+<!doctype html><html lang="fa"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>شیوه‌نامه‌های جشنواره</title><link rel="stylesheet" href="style.css"></head><body>
+<section class="hero"><img src="poster.jpg" alt="پوستر هفتمین جشنواره علمی پژوهشی"></section>
+<section class="intro"><h1>شیوه‌نامه‌های هفتمین جشنواره</h1><p>دسترسی آفلاین به ۱۲ حوزه و جست‌وجوی یکپارچه مطالب</p><button class="guide-entry" onclick="location.href='guide.html'"><span>🧭</span><b>راهنمای انتخاب مسابقه</b><small>انتخاب مقطع و مشاهده گرایش‌های مجاز</small></button></section>
+<div class="search"><input id="q" placeholder="جست‌وجو در همه شیوه‌نامه‌ها…" autocomplete="off"></div>
+<div id="results" class="results"></div><main id="grid" class="grid"></main>
+<script>
+const docs=[
+['lab','آزمایشگاه علوم تجربی','🧪'],['literature','ادبیات و علوم انسانی','📚'],['energy','انرژی‌های نوین','☀️'],['robotics','رباتیک و هوش مصنوعی','🤖'],['biotech','زیست‌فناوری','🧬'],['stem','سلول‌های بنیادی و پزشکی بازساختی','🔬'],['nuclear','علوم و فنون هسته‌ای','⚛️'],['nano','نانوفناوری','🧫'],['aerospace','حمل‌ونقل پیشرفته، هوافضا و دریا','🚀'],['astronomy','نجوم و فناوری‌های فضایی','🔭'],['herbal','گیاهان دارویی و طب سنتی','🌿'],['coding','کدنویسی','💻']];
+const grid=document.getElementById('grid');
+docs.forEach(d=>{let x=document.createElement('div');x.className='card';x.innerHTML=`<div class="icon">${d[2]}</div><b>${d[1]}</b>`;x.onclick=()=>location.href=`viewer.html?doc=${d[0]}`;grid.appendChild(x)});
+let index=[];fetch('search-index.json').then(r=>r.json()).then(x=>index=x);
+let timer;document.getElementById('q').oninput=e=>{clearTimeout(timer);timer=setTimeout(()=>search(e.target.value),180)};
+function norm(s){return String(s||'').normalize('NFKC').replace(/[يى]/g,'ی').replace(/ك/g,'ک').replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g,'').replace(/[\u200c\u200d]/g,' ').replace(/[^\u0600-\u06ff0-9A-Za-z]+/g,' ').replace(/\s+/g,' ').trim()}
+function compact(s){return norm(s).replace(/\s/g,'')}
+function search(raw){const box=document.getElementById('results'),q=norm(raw),qc=compact(raw);box.innerHTML='';grid.style.display=q.length>1?'none':'grid';if(q.length<2)return;let found=[];for(const d of index){for(const p of d.pages){let t=norm(p.text),at=t.indexOf(q);if(at<0&&compact(t).includes(qc))at=0;if(at>=0){found.push({id:d.id,title:d.title,page:p.page,snip:t.slice(Math.max(0,at-65),at+q.length+90)});if(found.length>=60)break}}if(found.length>=60)break}
+if(!found.length){box.innerHTML='<div class="empty">نتیجه‌ای پیدا نشد.</div>';return}found.forEach(r=>{let el=document.createElement('div');el.className='result';el.innerHTML=`<b>${r.title}</b> <small>— صفحه ${r.page}</small><p>${r.snip}</p>`;el.onclick=()=>location.href=`viewer.html?doc=${r.id}&page=${r.page}&q=${encodeURIComponent(q)}`;box.appendChild(el)})}
+</script></body></html>

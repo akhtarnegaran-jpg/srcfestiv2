@@ -1,0 +1,147 @@
+{
+  "levels": [
+    {"id":"elementary","title":"دوره دوم ابتدایی","subtitle":"پایه‌های چهارم، پنجم و ششم"},
+    {"id":"first","title":"دوره اول متوسطه","subtitle":"پایه‌های هفتم، هشتم و نهم"},
+    {"id":"theory","title":"دوره دوم متوسطه نظری","subtitle":"پایه‌های دهم، یازدهم و دوازدهم"},
+    {"id":"technical","title":"دوره دوم متوسطه فنی‌وحرفه‌ای و کاردانش","subtitle":"پایه‌های دهم، یازدهم و دوازدهم"}
+  ],
+  "fields": [
+    {
+      "id":"aerospace","title":"حمل‌ونقل پیشرفته، هوافضا و دریا","icon":"🚀",
+      "items":[
+        {"title":"انجمن علمی‌پژوهشی هوافضا و دریا","levels":["first","theory","technical"],"page":8},
+        {"title":"کاوشگر کوچک هوافضا و دریا","levels":["elementary"],"page":12},
+        {"title":"طراحی و ساخت پهپاد","levels":["first","theory","technical"],"page":17},
+        {"title":"ساخت و پرتاب گلایدر","levels":["first","theory","technical"],"page":21},
+        {"title":"ساخت و پرتاب موشک آبی","levels":["elementary"],"page":26},
+        {"title":"پژوهش در حوزه هوافضا و دریا و حمل‌ونقل پیشرفته","levels":["first","theory","technical"],"page":30},
+        {"title":"ساخت شناور دریایی (اطفای حریق)","levels":["first","theory","technical"],"page":38},
+        {"title":"طراحی و ساخت قطار مغناطیسی","levels":["first","theory","technical"],"page":42}
+      ]
+    },
+    {
+      "id":"astronomy","title":"نجوم و فناوری‌های فضایی","icon":"🔭",
+      "items":[
+        {"title":"انجمن علمی‌پژوهشی نجوم و فناوری‌های فضایی","levels":["theory","technical"],"page":9},
+        {"title":"ارائه محتوا و مدل‌سازی نجوم و فناوری‌های فضایی","levels":["elementary"],"page":13},
+        {"title":"چالش گرانش","levels":["first","theory","technical"],"page":17},
+        {"title":"پژوهش در نجوم و فضا","levels":["first","theory","technical"],"page":22},
+        {"title":"استهلال و نجوم رصدی","levels":["first","theory","technical"],"page":29},
+        {"title":"کاوشگران کوچک آسمان","levels":["elementary"],"page":35},
+        {"title":"کاوش فضایی","levels":["first","theory","technical"],"page":40},
+        {"title":"کارآفرینی دانش‌بنیان نجوم و فناوری‌های فضایی","levels":["first","theory","technical"],"page":46}
+      ]
+    },
+    {
+      "id":"biotech","title":"زیست‌فناوری","icon":"🧬",
+      "items":[
+        {"title":"خلق ایده و رویداد علمی زیست‌فناوری با نگرش کارآفرینی","levels":["first","theory","technical"],"page":8},
+        {"title":"مقاله علمی مبتنی بر پژوهش‌های آزمایشگاهی","levels":["first","theory","technical"],"page":14},
+        {"title":"انجمن علمی‌پژوهشی زیست‌فناوری","levels":["first","theory","technical"],"page":19},
+        {"title":"جام (مناظره علمی) زیست‌فناوری","levels":["first","theory","technical"],"page":25,"note":"ویژه پایه‌های نهم و دهم"},
+        {"title":"زیست‌فناوران کوچک","levels":["elementary"],"page":33},
+        {"title":"تولید محصول زیست‌فناورانه با نگرش کارآفرینی","levels":["elementary","first","theory","technical"],"page":36}
+      ]
+    },
+    {
+      "id":"coding","title":"کدنویسی","icon":"💻",
+      "items":[
+        {"title":"انجمن علمی و پژوهشی کدنویسی","levels":["first"],"page":8},
+        {"title":"ساخت بازی مبتنی بر اسکرچ","levels":["elementary","first"],"page":12},
+        {"title":"برنامه‌نویسی با تفکر الگوریتمی","levels":["first","theory","technical"],"page":16},
+        {"title":"برنامه‌نویسی با پایتون","levels":["first","theory","technical"],"page":19},
+        {"title":"برنامه‌نویسی برای دستگاه‌های هوشمند","levels":["first","theory","technical"],"page":22},
+        {"title":"برنامه‌نویسی و طراحی وب","levels":["first","theory","technical"],"page":26},
+        {"title":"برنامه‌نویسی مبتنی بر هوش مصنوعی","levels":["first","theory","technical"],"page":29},
+        {"title":"ساخت بازی مبتنی بر موتور بازی‌سازی","levels":["first","theory","technical"],"page":33}
+      ]
+    },
+    {
+      "id":"energy","title":"انرژی‌های نوین","icon":"☀️",
+      "items":[
+        {"title":"باشگاه دانش‌آموزی انرژی (انجمن علمی‌پژوهشی انرژی)","levels":["first"],"page":8},
+        {"title":"انرژی‌پژوهی","levels":["first","theory","technical"],"page":15},
+        {"title":"تولید محتوا","levels":["elementary","first","theory","technical"],"page":23},
+        {"title":"محصول خلاقانه با نگرش کارآفرینی","levels":["first","theory","technical"],"page":29},
+        {"title":"خودروهای خورشیدی","levels":["elementary","theory","technical"],"page":34,"note":"برای دوره دوم ابتدایی به‌صورت انفرادی و برای دوره متوسطه به‌صورت انفرادی یا گروهی"}
+      ]
+    },
+    {
+      "id":"herbal","title":"گیاهان دارویی و طب سنتی","icon":"🌿",
+      "items":[
+        {"title":"انجمن علمی‌پژوهشی گیاهان دارویی و طب سنتی","levels":["first","theory","technical"],"page":8},
+        {"title":"کاوشگران گیاهان دارویی","levels":["elementary","first","theory","technical"],"page":14},
+        {"title":"پرورش گیاهان دارویی","levels":["elementary"],"page":19},
+        {"title":"بسته‌بندی گیاهان دارویی و فرآورده‌ها","levels":["first","theory","technical"],"page":23},
+        {"title":"پژوهش بر پایه تولید و فرآوری محصول جدید","levels":["first","theory","technical"],"page":26},
+        {"title":"مقاله علمی‌ترویجی در حوزه طب سنتی و خواص گیاهان دارویی","levels":["first","theory","technical"],"page":33}
+      ]
+    },
+    {
+      "id":"lab","title":"آزمایشگاه علوم تجربی","icon":"🧪",
+      "items":[
+        {"title":"انجمن علمی‌پژوهشی آزمایشگاه","levels":["elementary","first","theory","technical"],"page":8},
+        {"title":"ارائه محتوای آزمایشگاهی","levels":["theory","technical"],"page":14},
+        {"title":"کارآفرینی دانش‌بنیان آزمایشگاهی","levels":["first","theory","technical"],"page":22},
+        {"title":"مسابقه حضوری فیزیک","levels":["theory"],"page":32,"note":"ویژه پایه‌های دهم و یازدهم دوره دوم متوسطه نظری"},
+        {"title":"مسابقه حضوری شیمی","levels":["theory"],"page":32,"note":"ویژه پایه‌های دهم و یازدهم دوره دوم متوسطه نظری"},
+        {"title":"مسابقه حضوری زیست و زمین‌شناسی","levels":["theory"],"page":32,"note":"زیست: پایه‌های دهم و یازدهم؛ زمین‌شناسی: مطابق شرایط مندرج در شیوه‌نامه"}
+      ]
+    },
+    {
+      "id":"literature","title":"ادبیات و علوم انسانی","icon":"📚",
+      "items":[
+        {"title":"انجمن ادبیات و علوم انسانی","levels":["first","theory","technical"],"page":8},
+        {"title":"تصویرگری","levels":["elementary"],"page":12},
+        {"title":"نقالی","levels":["elementary"],"page":16},
+        {"title":"داستان‌نویسی","levels":["first","theory","technical"],"page":19},
+        {"title":"شعر","levels":["first","theory","technical"],"page":23},
+        {"title":"پژوهش در ادبیات و علوم انسانی","levels":["theory","technical"],"page":26,"note":"دانش‌آموزان رشته علوم و معارف اسلامی نیز مطابق جدول شیوه‌نامه مجازند"},
+        {"title":"گردشگری با رویکرد بوم‌گردی","levels":["first","theory","technical"],"page":32},
+        {"title":"ایده‌پردازی در مدیریت و حکمرانی","levels":["first","theory","technical"],"page":38},
+        {"title":"ندای مطهر","levels":["first","theory","technical"],"page":43}
+      ]
+    },
+    {
+      "id":"nano","title":"نانوفناوری","icon":"🧫",
+      "items":[
+        {"title":"انجمن علمی‌پژوهشی نانو","levels":["first","theory","technical"],"page":8},
+        {"title":"مدرس کوچک نانو","levels":["elementary"],"page":14},
+        {"title":"گزارش‌نویسی و مستندسازی نانویی","levels":["elementary"],"page":19},
+        {"title":"مقاله علمی‌پژوهشی نانو","levels":["theory","technical"],"page":28},
+        {"title":"پیشنهاده پژوهش نوآورانه نانو","levels":["first","theory","technical"],"page":33},
+        {"title":"طراحی محصول نانویی با محوریت کارآفرینی","levels":["first","theory","technical"],"page":39}
+      ]
+    },
+    {
+      "id":"nuclear","title":"علوم و فنون هسته‌ای","icon":"⚛️",
+      "items":[
+        {"title":"کاوشگران کوچک هسته‌ای","levels":["elementary"],"page":8},
+        {"title":"زندگینامه شهدای هسته‌ای (روایتگری و ساخت فیلم مستند)","levels":["elementary","first","theory","technical"],"page":14},
+        {"title":"تولید محتوای هسته‌ای","levels":["elementary","first","theory","technical"],"page":21,"note":"قالب اثر متناسب با مقطع تحصیلی متفاوت است"},
+        {"title":"هسته‌پژوهی","levels":["first","theory","technical"],"page":31},
+        {"title":"شبیه‌سازی هسته‌ای (نمونه‌سازی، ماکت یا طراحی بازی)","levels":["elementary","first","theory","technical"],"page":40},
+        {"title":"انجمن علمی هسته‌ای","levels":["first","theory","technical"],"page":47}
+      ]
+    },
+    {
+      "id":"robotics","title":"رباتیک و هوش مصنوعی","icon":"🤖",
+      "items":[
+        {"title":"انجمن علمی‌پژوهشی رباتیک و هوش مصنوعی","levels":["first","theory","technical"],"page":8},
+        {"title":"ربات امدادگر محیط‌زیست","levels":["elementary"],"page":16,"note":"ویژه پایه‌های چهارم، پنجم و ششم"},
+        {"title":"خودروی خودران","levels":["first","theory","technical"],"page":31},
+        {"title":"سازه‌های مکاترونیکی","levels":["elementary","first","theory","technical"],"page":39}
+      ]
+    },
+    {
+      "id":"stem","title":"سلول‌های بنیادی و پزشکی بازساختی","icon":"🔬",
+      "items":[
+        {"title":"تولید محتوای سلول‌های بنیادی","levels":["elementary"],"page":8},
+        {"title":"انجمن علمی‌پژوهشی سلول‌های بنیادی","levels":["first","theory","technical"],"page":14},
+        {"title":"آزمایش‌های سلول‌های بنیادی","levels":["first","theory","technical"],"page":19},
+        {"title":"جام (مناظره علمی) سلول‌های بنیادی","levels":["first","theory","technical"],"page":23},
+        {"title":"مقاله علمی‌پژوهشی","levels":["first","theory","technical"],"page":32}
+      ]
+    }
+  ]
+}
